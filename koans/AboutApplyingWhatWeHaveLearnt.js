@@ -30,15 +30,20 @@ describe("About Applying What We Have Learnt", function() {
         }
     }
 
-    expect(productsICanEat.length).toBe(FILL_ME_IN);
+    expect(productsICanEat.length).toBe(1);
   });
 
   it("given I'm allergic to nuts and hate mushrooms, it should find a pizza I can eat (functional)", function () {
       var productsICanEat = [];
+      var noNutsOrShrooms = function(item) {
+        return !item.containsNuts && _(item.ingredients).all(function(x) { return x !== "mushrooms"});
+      }
 
-      /* solve using filter() & all() / any() */
+      productsICanEat = products.filter(noNutsOrShrooms);
 
-      expect(productsICanEat.length).toBe(FILL_ME_IN);
+      
+
+      expect(productsICanEat.length).toBe(1);
   });
 
   /*********************************************************************************/
@@ -52,13 +57,16 @@ describe("About Applying What We Have Learnt", function() {
       }
     }
     
-    expect(sum).toBe(FILL_ME_IN);
+    expect(sum).toBe(233168);
   });
 
   it("should add all the natural numbers below 1000 that are multiples of 3 or 5 (functional)", function () {
-    var sum = FILL_ME_IN;    /* try chaining range() and reduce() */
+    var sum = _(_.range(1,1000)).chain()
+                    .filter(function(x) { return x % 3 === 0 || x % 5 === 0;})
+                    .reduce(function(total, current) { return total + current;})
+                    .value();    /* try chaining range() and reduce() */
 
-    expect(233168).toBe(FILL_ME_IN);
+    expect(233168).toBe(sum);
   });
 
   /*********************************************************************************/
@@ -71,23 +79,67 @@ describe("About Applying What We Have Learnt", function() {
         }
     }
 
-    expect(ingredientCount['mushrooms']).toBe(FILL_ME_IN);
+    expect(ingredientCount['mushrooms']).toBe(2);
   });
 
   it("should count the ingredient occurrence (functional)", function () {
     var ingredientCount = { "{ingredient name}": 0 };
+    var gatherIngredients = function(item) {
+        return item.ingredients;
+    }
+    var addIngredients = function(total, ingredient) {
+      ingredientCount[ingredient]= (ingredientCount[ingredient] || 0) + 1;
+      return total;
+    }
+
+    _(products).chain()
+               .map(gatherIngredients)
+               .flatten()
+               .reduce(addIngredients)
+               .value();
 
     /* chain() together map(), flatten() and reduce() */
 
-    expect(ingredientCount['mushrooms']).toBe(FILL_ME_IN);
+    expect(ingredientCount['mushrooms']).toBe(2);
   });
 
   /*********************************************************************************/
   /* UNCOMMENT FOR ADVANCED */
-  /*
-  it("should find the largest prime factor of a composite number", function () {
   
+  it("should find the largest prime factor of a composite number", function () {
+    var largestPrimeFactor = function (num) {
+      var factors = [];
+      var primes = [];
+      var checkPrime = function(num) {
+        for (var i = num - 1; i > 1; i--) {
+          if (num % i === 0) {
+            return false;
+          } 
+        }
+        return true;
+      }
+      if (checkPrime(num) || num <= 1 || num % 1 !== 0) return "Not a composite number!"; // filter invalid arguments
+      
+      for(var i = num; i > 0; i--) { // create array of factors
+        if (num % i === 0) {
+          factors.push(i);
+        }
+      }
+      
+      primes = factors.filter(checkPrime);
+
+      return primes[0];
+
+    }
+    expect(largestPrimeFactor(0)).toBe("Not a composite number!");
+    expect(largestPrimeFactor(13)).toBe("Not a composite number!");
+    expect(largestPrimeFactor(2.5)).toBe("Not a composite number!");
+    expect(largestPrimeFactor(26)).toBe(13);
+    expect(largestPrimeFactor(28)).toBe(7);
+    expect(largestPrimeFactor(959)).toBe(137);
   });
+
+  /*
 
   it("should find the largest palindrome made from the product of two 3 digit numbers", function () {
     
@@ -105,5 +157,7 @@ describe("About Applying What We Have Learnt", function() {
   it("should find the 10001st prime", function () {
 
   });
+
   */
+  
 });
