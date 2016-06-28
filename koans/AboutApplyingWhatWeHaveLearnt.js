@@ -139,25 +139,112 @@ describe("About Applying What We Have Learnt", function() {
     expect(largestPrimeFactor(959)).toBe(137);
   });
 
-  /*
+  
 
   it("should find the largest palindrome made from the product of two 3 digit numbers", function () {
+    var largestPalinProduct = function() {
+      var largest = 0;
+      
+      var isPalindrome = function(num) {
+        var revStr = ""
+        var str = num.toString();
+        for (var i = str.length - 1; i >= 0; i--) {
+          revStr += str[i];
+        }
+        return (str === revStr);
+      } 
+
+      for(var i = 100; i < 1000; i++) {
+        for (var j = 100; j < 1000; j++) {
+          if (isPalindrome(i*j) && (i*j) > largest) {
+            largest = i*j; 
+          }
+        }
+      }
+      return largest;
+    }
+    expect(largestPalinProduct()).toBe(906609);
     
   });
 
+  
+
   it("should find the smallest number divisible by each of the numbers 1 to 20", function () {
-      
-    
+      var smallestDivisible = function() { // This solution is probably not the fastest but it works
+        var check = 20;
+        var notDivisible = function(num) {
+          for (var i = 2; i <= 20 ; i++) {
+            if (num % i !== 0) {
+              return true;
+            }
+          }
+          return false;
+        }
+
+        while (notDivisible(check)) {
+          check++;
+        }
+        return check;
+      }
+    expect(smallestDivisible()).toBe(232792560);
   });
 
   it("should find the difference between the sum of the squares and the square of the sums", function () {
+    var squaresAndSums = function(num) {
+      var sumOfSquares = function(num) {
+        var sum = 0;
+        for (num; num > 0; num--) {
+          sum += num * num;
+        }
+        return sum;
+      }
+      var squareOfSums = function(num) {
+        var total = 0;
+        for (num; num > 0; num--) {
+          total += num;
+        }
+        return total * total;
+      }
+
+      return squareOfSums(num) - sumOfSquares(num);
+    }
+    expect(squaresAndSums(10)).toBe(2640);
+    expect(squaresAndSums(100)).toBe(25164150)
     
   });
 
   it("should find the 10001st prime", function () {
+    var findThisPrime = function(ordinalNum) { // This also is a very slow solution but, once again, works!
+      var primeCount = 0;
+      var intCount = 2;
+      var prime = 2;
+      var checkPrime = function(num) {
+        for (var i = num - 1; i > 1; i--) {
+          if (num % i === 0) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      while (primeCount < ordinalNum) {
+        if (checkPrime(intCount)) {
+          primeCount++;
+          prime = intCount;
+          intCount++;
+        } else {
+        intCount++;
+        }
+      }
+      return prime;
+
+    }
+    expect(findThisPrime(1)).toBe(2);
+    expect(findThisPrime(100)).toBe(541);
+    expect(findThisPrime(10001)).toBe(104743);
 
   });
 
-  */
+  
   
 });
